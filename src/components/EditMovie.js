@@ -148,15 +148,23 @@ const EditMovie = () => {
                       direction="column"
                       alignItems="center"
                       spacing={2}
+                      height="100%"
                     >
-                      <Grid item>
+                      <Grid
+                        item
+                        height="100%"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        flexDirection="column"
+                      >
                         {formData.poster ? (
                           <>
-                            <Card style={{ maxWidth: "300px" }}>
+                            <Card sx={{ maxWidth: "300px", height: "100%" }}>
                               <CardMedia
                                 component="img"
                                 alt="Uploaded Image"
-                                height="auto"
+                                height="100%"
                                 image={
                                   formData.poster instanceof File
                                     ? URL.createObjectURL(formData.poster)

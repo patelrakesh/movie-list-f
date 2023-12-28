@@ -8,6 +8,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import AddIcon from "../icons/AddIcon";
 import LogoutIcon from "../icons/LogoutIcon";
 import ListingSkeleton from "./ListingSkeleton";
+import EmptyMovieList from "./EmptyMovieList";
 
 const MovieListing = () => {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const MovieListing = () => {
     <>
       <Box height={"100%"}>
         {loading ? (
-          <Box height={{xs: "100%", md:"100vh"}}>
+          <Box height={{ xs: "100%", md: "100vh" }}>
             <Grid
               container
               spacing={{ xs: 2, md: 6 }}
@@ -102,52 +103,41 @@ const MovieListing = () => {
                   pb: 5,
                 }}
               >
-                <Typography
+                <Box
                   sx={{
                     color: "#FFF",
                     fontSize: { xs: "14px", sm: "16px" },
                     fontWeight: 600,
+                    display: "flex",
+                    gap: "5px",
+                    alignItems: "center",
+                    svg: {
+                      height: { xs: "18px", md: "22px" },
+                      width: { xs: "18px", md: "22px" },
+                    },
                   }}
                 >
-                  My movies{" "}
-                  <Box
-                    component={"span"}
-                    onClick={handleRoute}
-                    sx={{
-                      verticalAlign: "middle",
-                      svg: {
-                        height: { xs: "18px", md: "32px" },
-                        width: { xs: "18px", md: "32px" },
-                      },
-                    }}
-                  >
-                    <AddIcon />
-                  </Box>
-                </Typography>
-                <Typography
+                  <Typography>My movies </Typography>
+                  <AddIcon />
+                </Box>
+                <Box
                   sx={{
                     color: "#FFF",
                     fontSize: { xs: "14px", sm: "16px" },
-                    fontWeight: 700,
-                    cursor: "pointer",
+                    fontWeight: 600,
+                    display: "flex",
+                    gap: "5px",
+                    alignItems: "center",
+                    svg: {
+                      height: { xs: "18px", md: "22px" },
+                      width: { xs: "18px", md: "22px" },
+                    },
                   }}
                   onClick={logout}
                 >
-                  Logout
-                  <Box
-                    component={"span"}
-                    ml={{ xs: 1, md: 2 }}
-                    sx={{
-                      verticalAlign: "middle",
-                      svg: {
-                        height: { xs: "18px", md: "32px" },
-                        width: { xs: "18px", md: "32px" },
-                      },
-                    }}
-                  >
-                    <LogoutIcon />
-                  </Box>
-                </Typography>
+                  <Typography>Logout </Typography>
+                  <LogoutIcon />
+                </Box>
               </Box>
 
               <Grid
@@ -312,43 +302,7 @@ const MovieListing = () => {
             </Box>
           </>
         ) : (
-          <>
-            <Box
-              height={"100vh"}
-              px={2}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              textAlign="center"
-            >
-              <Typography
-                sx={{
-                  fontSize: "48px",
-                  fontWeight: 600,
-                  color: "#FFF",
-                }}
-              >
-                Your movie list is empty
-              </Typography>
-              <Button
-                sx={{
-                  borderRadius: "10px",
-                  background: " var(--primary, #2BD17E)",
-                  padding: "16px 28px",
-                  color: "#FFF",
-                  fontSize: "16px",
-                  fontWeight: 700,
-                  mt: 3,
-                  "&:hover": {
-                    border: "1px solid #2BD17E",
-                  },
-                }}
-              >
-                Add a new movie
-              </Button>
-            </Box>
-          </>
+          <EmptyMovieList />
         )}
       </Box>
     </>
