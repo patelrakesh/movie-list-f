@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, Typography, IconButton } from "@mui/material";
+import { Box, Button, Grid, Typography, IconButton, Container } from "@mui/material";
 import axios from "axios";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
@@ -64,7 +64,7 @@ const MovieListing = () => {
   };
   return (
     <>
-      <Box height={"100%"}>
+      <Container height={"100%"}>
         {loading ? (
           <Box height={{ xs: "100%", md: "100vh" }}>
             <Grid
@@ -91,7 +91,8 @@ const MovieListing = () => {
               sx={{
                 maxWidth: "1440px",
                 margin: "auto",
-                padding: { xs: 4, md: 9 },
+                px: { xs: 2, md:0 },
+                py: { xs: 8},
               }}
             >
               <Box
@@ -145,7 +146,7 @@ const MovieListing = () => {
 
               <Grid
                 container
-                spacing={{ xs: 2, md: 6 }}
+                spacing={{ xs: 2, md: 3 }}
                 justifyContent={"center"}
                 sx={{
                   ".css-exfl4s-MuiGrid-root": {
@@ -307,7 +308,7 @@ const MovieListing = () => {
         ) : (
           <EmptyMovieList />
         )}
-      </Box>
+      </Container>
     </>
   );
 };
