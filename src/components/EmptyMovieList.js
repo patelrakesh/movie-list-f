@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Button, Grid, Typography, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const EmptyMovieList = () => {
+  const navigate = useNavigate();
   return (
     <Box
       height={"100vh"}
@@ -34,6 +36,7 @@ const EmptyMovieList = () => {
             border: "1px solid #2BD17E",
           },
         }}
+        onClick={() => navigate("/addmovie")}
       >
         Add a new movie
       </Button>
