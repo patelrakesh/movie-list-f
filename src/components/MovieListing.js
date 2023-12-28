@@ -115,6 +115,7 @@ const MovieListing = () => {
                       height: { xs: "18px", md: "22px" },
                       width: { xs: "18px", md: "22px" },
                     },
+                    cursor: 'pointer'
                   }}
                   onClick={handleRoute}
                 >
@@ -133,6 +134,7 @@ const MovieListing = () => {
                       height: { xs: "18px", md: "22px" },
                       width: { xs: "18px", md: "22px" },
                     },
+                    cursor: 'pointer'
                   }}
                   onClick={logout}
                 >
