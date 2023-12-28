@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, IconButton } from "@mui/material";
 import axios from "axios";
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 import Pagination from "@mui/material/Pagination";
-import { useNavigate } from "react-router-dom";
-import IconButton from '@mui/material/IconButton';
-import PaginationItem from '@mui/material/PaginationItem';
-// import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-// import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import PaginationItem from "@mui/material/PaginationItem";
+
 const MovieListing = () => {
   const navigate = useNavigate();
   const [moviesList, setMoviesList] = useState([]);
-  const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
+  const [page, setPage] = React.useState(1);
 
   const getMovieList = async (newPage) => {
     try {
       const response = await axios.get(
-        `https://movie-list-b.vercel.app/api/movie?page=${newPage}&limit=${8}`
+        `${process.env.REACT_APP_API_URL}/api/movie?page=${newPage}&limit=${8}`
       );
-      console.log("console_movieData", response.data);
       setMoviesList(response.data.data.data);
       setTotalPages(response.data?.data?.pagination?.totalPages);
     } catch (error) {
@@ -40,14 +38,22 @@ const MovieListing = () => {
     getMovieList(value);
   };
 
+  const handleEdit = (movieData) => {
+    navigate("/editmovie", { state: { movieData } });
+  };
+
   const handlePrevClick = () => {
-    handleChange(page - 1);
+    handleChange("", page - 1);
   };
 
   const handleNextClick = () => {
-    handleChange(page + 1);
+    handleChange("", page + 1);
   };
 
+  const logout = () => {
+    navigate("/");
+    localStorage.setItem("token", "");
+  };
   return (
     <>
       <Box
@@ -55,6 +61,11 @@ const MovieListing = () => {
           backgroundColor: "#093545",
           maxWidth: "100%",
           position: "relative",
+          ".css-fbj545-MuiTypography-root,.css-z3mf8l-MuiTypography-root,.css-1sv4ooo-MuiTypography-root ,.css-lk5szp-MuiTypography-root,.css-1gol372-MuiTypography-root":
+            {
+              fontFamily: "Montserrat",
+            },
+          fontFamily: "Montserrat !important",
         }}
       >
         <Box
@@ -66,7 +77,7 @@ const MovieListing = () => {
         ></Box>
         <Box
           component={"img"}
-          src="./pageVector2.png"
+          src="./pagevector2.png"
           position={"absolute"}
           bottom={0}
           width={"100%"}
@@ -132,7 +143,9 @@ const MovieListing = () => {
                     color: "#FFF",
                     fontSize: { xs: "14px", sm: "16px" },
                     fontWeight: 700,
+                    cursor: "pointer",
                   }}
+                  onClick={logout}
                 >
                   Logout
                   <Box
@@ -181,6 +194,7 @@ const MovieListing = () => {
                   <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                     <Box
                       sx={{
+                        position: "relative",
                         maxWidth: "280px",
                         borderRadius: "12px",
                         backgroundColor: "#092C39",
@@ -189,9 +203,15 @@ const MovieListing = () => {
                         justifyContent: "center",
                         textAlign: "center",
                         margin: "auto",
+                        "&:hover img": {
+                          opacity: 0.8,
+                        },
+                        "&:hover .editButton": {
+                          display: "block",
+                        },
                       }}
                     >
-                      <Box px={1}>
+                      <Box px={1} position="relative">
                         <Box
                           component="img"
                           src={movie.poster || "./movie1.png"}
@@ -201,7 +221,28 @@ const MovieListing = () => {
                           }}
                           py={1}
                           width={"100%"}
+                          height={"400px"}
+                          borderRadius="12px"
+                          transition="opacity 0.3s ease-in-out"
                         />
+                        <IconButton
+                          aria-label="edit"
+                          className="editButton"
+                          sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            display: "none",
+                            color: "#fff",
+                            "&:hover": {
+                              backgroundColor: "rgba(0, 0, 0, 0.6)",
+                            },
+                          }}
+                          onClick={() => handleEdit(movie)}
+                        >
+                          <EditIcon />
+                        </IconButton>
                       </Box>
                       <Typography
                         sx={{
@@ -231,6 +272,7 @@ const MovieListing = () => {
                   </Grid>
                 ))}
               </Grid>
+
               <Box my={15}>
                 <Pagination
                   count={totalPages}
@@ -246,13 +288,13 @@ const MovieListing = () => {
                           onClick={handlePrevClick}
                           disabled={page === 1}
                           sx={{
-                            color: '#fff !important',
+                            color: "#fff !important",
                             background: "transparent !important",
                             fontSize: "16px",
                             fontWeight: 700,
-                            '&.Mui-disabled': {
-                              opacity: .7
-                            }
+                            "&.Mui-disabled": {
+                              opacity: 0.7,
+                            },
                           }}
                         >
                           Prev
@@ -265,13 +307,13 @@ const MovieListing = () => {
                           onClick={handleNextClick}
                           disabled={page === totalPages}
                           sx={{
-                            color: '#fff !important',
+                            color: "#fff !important",
                             background: "transparent !important",
                             fontSize: "16px",
                             fontWeight: 700,
-                            '&.Mui-disabled': {
-                              opacity: .7
-                            }
+                            "&.Mui-disabled": {
+                              opacity: 0.7,
+                            },
                           }}
                         >
                           Next

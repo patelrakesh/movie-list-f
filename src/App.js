@@ -1,7 +1,8 @@
-import AddMovie from "./components/AddMovie";
 import MovieListing from "./components/MovieListing";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from "./components/SignUp"; 
+import CreateMovieList from "./components/CreateMovieList";
+import EditMovie from "./components/EditMovie";
 
 function PrivateRoute({ element: Element, ...rest }) {
   const token = localStorage.getItem('token');
@@ -19,7 +20,11 @@ function App() {
         />
         <Route
           path="/addmovie"
-          element={<PrivateRoute element={AddMovie} />}
+          element={<PrivateRoute element={CreateMovieList} />}
+        />
+        <Route
+          path="/editmovie"
+          element={<PrivateRoute element={EditMovie} />}
         />
       </Routes>
     </div>
