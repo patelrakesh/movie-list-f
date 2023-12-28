@@ -5,23 +5,30 @@ import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
+import AddIcon from "../icons/AddIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+import ListingSkeleton from "./ListingSkeleton";
 
 const MovieListing = () => {
   const navigate = useNavigate();
   const [moviesList, setMoviesList] = useState([]);
   const [totalPages, setTotalPages] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
 
   const getMovieList = async (newPage) => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/movie?page=${newPage}&limit=${8}`
       );
       setMoviesList(response.data.data.data);
       setTotalPages(response.data?.data?.pagination?.totalPages);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
+      setLoading(false);
     }
   };
 
@@ -56,33 +63,28 @@ const MovieListing = () => {
   };
   return (
     <>
-      <Box
-        sx={{
-          backgroundColor: "#093545",
-          maxWidth: "100%",
-          position: "relative",
-          ".css-fbj545-MuiTypography-root,.css-z3mf8l-MuiTypography-root,.css-1sv4ooo-MuiTypography-root ,.css-lk5szp-MuiTypography-root,.css-1gol372-MuiTypography-root":
-            {
-              fontFamily: "Montserrat",
-            },
-          fontFamily: "Montserrat !important",
-        }}
-      >
-        <Box
-          component={"img"}
-          src="./pageVector.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
-        <Box
-          component={"img"}
-          src="./pageVector2.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
-        {moviesList && moviesList.length > 0 ? (
+      <Box height={"100%"}>
+        {loading ? (
+          <Box height="100vh">
+            <Grid
+              container
+              spacing={{ xs: 2, md: 6 }}
+              justifyContent={"center"}
+              sx={{
+                marginTop: "0 !important",
+                ".css-exfl4s-MuiGrid-root": {
+                  width: "100%",
+                },
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <Grid key={i} item xs={12} sm={6} md={4} lg={3}>
+                  <ListingSkeleton />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        ) : moviesList && moviesList.length > 0 ? (
           <>
             <Box
               sx={{
@@ -119,23 +121,7 @@ const MovieListing = () => {
                       },
                     }}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                    >
-                      <g clip-path="url(#clip0_3_196)">
-                        <path
-                          d="M17.3334 9.33332H14.6667V14.6667H9.33342V17.3333H14.6667V22.6667H17.3334V17.3333H22.6667V14.6667H17.3334V9.33332ZM16.0001 2.66666C8.64008 2.66666 2.66675 8.63999 2.66675 16C2.66675 23.36 8.64008 29.3333 16.0001 29.3333C23.3601 29.3333 29.3334 23.36 29.3334 16C29.3334 8.63999 23.3601 2.66666 16.0001 2.66666ZM16.0001 26.6667C10.1201 26.6667 5.33341 21.88 5.33341 16C5.33341 10.12 10.1201 5.33332 16.0001 5.33332C21.8801 5.33332 26.6667 10.12 26.6667 16C26.6667 21.88 21.8801 26.6667 16.0001 26.6667Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_3_196">
-                          <rect width="32" height="32" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <AddIcon />
                   </Box>
                 </Typography>
                 <Typography
@@ -159,23 +145,7 @@ const MovieListing = () => {
                       },
                     }}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                    >
-                      <g clip-path="url(#clip0_7_232)">
-                        <path
-                          d="M22.6667 10.6667L20.7867 12.5467L22.8933 14.6667H12V17.3333H22.8933L20.7867 19.44L22.6667 21.3333L28 16L22.6667 10.6667ZM6.66667 6.66667H16V4H6.66667C5.2 4 4 5.2 4 6.66667V25.3333C4 26.8 5.2 28 6.66667 28H16V25.3333H6.66667V6.66667Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_7_232">
-                          <rect width="32" height="32" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <LogoutIcon />
                   </Box>
                 </Typography>
               </Box>
@@ -343,42 +313,40 @@ const MovieListing = () => {
           </>
         ) : (
           <>
-            <Box height={"100vh"} margin={"auto"} position={"relative"}>
-              <Box
-                position={"absolute"}
+            <Box
+              height={"100vh"}
+              px={2}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+            >
+              <Typography
                 sx={{
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  textAlign: "center",
+                  fontSize: "48px",
+                  fontWeight: 600,
+                  color: "#FFF",
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: "48px",
-                    fontWeight: 600,
-                    color: "#FFF",
-                  }}
-                >
-                  Your movie list is empty
-                </Typography>
-                <Button
-                  sx={{
-                    borderRadius: "10px",
-                    background: " var(--primary, #2BD17E)",
-                    padding: "16px 28px",
-                    color: "#FFF",
-                    fontSize: "16px",
-                    fontWeight: 700,
-                    mt: 3,
-                    "&:hover": {
-                      border: "1px solid #2BD17E",
-                    },
-                  }}
-                >
-                  Add a new movie
-                </Button>
-              </Box>
+                Your movie list is empty
+              </Typography>
+              <Button
+                sx={{
+                  borderRadius: "10px",
+                  background: " var(--primary, #2BD17E)",
+                  padding: "16px 28px",
+                  color: "#FFF",
+                  fontSize: "16px",
+                  fontWeight: 700,
+                  mt: 3,
+                  "&:hover": {
+                    border: "1px solid #2BD17E",
+                  },
+                }}
+              >
+                Add a new movie
+              </Button>
             </Box>
           </>
         )}

@@ -11,50 +11,51 @@ import {
   Button,
   FormHelperText,
 } from "@mui/material";
-import axios from 'axios';
-import { useNavigate  } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import ImportIcon from "../icons/ImportIcon";
 
 const CreateMovieList = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleImageUpload = (event) => {
-    console.log(event.target.files[0],"idchuiehuihu")
     const file = event.target.files[0];
-    console.log("filee", file)
     if (file) {
       setFormData({ ...formData, poster: file });
-      setFormErrors({ ...formErrors, poster:false });
+      setFormErrors({ ...formErrors, poster: false });
     }
   };
+  const [loading, setLoading] = React.useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
     publishYear: "",
-    poster: ''
+    poster: "",
   });
-  
+
   const [formErrors, setFormErrors] = useState({
     title: false,
     publishYear: false,
-    poster: false
+    poster: false,
   });
 
   const handleInputChange = (e) => {
-    console.log(e.target.name,"idjuefhd")
+    console.log(e.target.name, "idjuefhd");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
     setFormErrors({
       ...formErrors,
-      [e.target.name]: false
-    })
+      [e.target.name]: false,
+    });
   };
   const handleCancel = (e) => {
-    navigate('/movies')
+    navigate("/movies");
   };
 
   const handleSubmit = () => {
-    console.log(formData,"urhfurehfui")
+    console.log(formData, "urhfurehfui");
     const errors = {};
 
     if (formData.title === "") {
@@ -67,51 +68,39 @@ const CreateMovieList = () => {
       errors.poster = true;
     }
     setFormErrors(errors);
-    postMovieList()
+    postMovieList();
   };
 
-const postMovieList = () =>{
-  const addMovieData = new FormData();
-  addMovieData.append('title', formData.title); 
-  addMovieData.append('publishYear', formData.publishYear);
-  addMovieData.append('poster', formData.poster);
-  console.log(addMovieData,"addMovieDataed")
-  axios.post(`${process.env.REACT_APP_API_URL}/api/movie`, addMovieData)
-  .then((response) => {
-    console.log('Response:', response);
-    navigate('/movies')
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-}
+  const postMovieList = async () => {
+    setLoading(true);
+    const addMovieData = new FormData();
+    addMovieData.append("title", formData.title);
+    addMovieData.append("publishYear", formData.publishYear);
+    addMovieData.append("poster", formData.poster);
+    console.log(addMovieData, "addMovieDataed");
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}/api/movie`, addMovieData)
+      .then((response) => {
+        setLoading(false);
+        console.log("Response:", response);
+        navigate("/movies");
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <>
       <Box
-        position={"relative"}
-        backgroundColor="#093545"
         sx={{
           ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
             border: "none",
           },
-          pb:15
+          pb: 15,
         }}
       >
-         <Box
-          component={"img"}
-          src="./pagevector.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
-        <Box
-          component={"img"}
-          src="./pageVector2.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
         <Box paddingLeft={{ xs: 0, sm: 0, md: 10 }}>
           <Box py={10}>
             <Typography
@@ -128,7 +117,7 @@ const postMovieList = () =>{
             </Typography>
           </Box>
           <Box margin={{ xs: "0 30px", sm: "0 30px", md: "0" }}>
-            <Grid container spacing={1}>
+            <Grid container spacing={5}>
               <Grid
                 item
                 xs={12}
@@ -140,7 +129,7 @@ const postMovieList = () =>{
                   sx={{
                     flexGrow: 1,
                     height: { xs: "340px", sm: "340px", md: "504px" },
-                    width: { xs: "100%", sm: "100%", md: "473px" },
+                    width: { xs: "100%", sm: "100%", md: "100%", lg: "473px" },
                     borderRadius: "10px",
                     border: "2px dashed #FFF",
                     background: "var(--input-color, #224957)",
@@ -162,25 +151,40 @@ const postMovieList = () =>{
                       <Grid item>
                         {formData.poster ? (
                           <>
-                          <Card style={{ maxWidth: "300px" }}>
-                            <CardMedia
-                              component="img"
-                              alt="Uploaded Image"
-                              height="auto"
-                              image={formData.poster instanceof File ? URL.createObjectURL(formData.poster) : formData.poster}
-                            />
-                          </Card>
-                           <Box textAlign="center" onClick={()=> setFormData({...formData, poster: ""})}>
-                           <Typography variant="contained" component="span" sx={{fontFamily: "Montserrat",
-                               fontSize: "14px",
-                               fontWeight: 400,
-                               lineHeight: "24px",
-                               color: "#FFF",
-                               cursor: "pointer",}}>
-                             Click to Cancel
-                           </Typography>
-                         </Box>
-                         </>
+                            <Card style={{ maxWidth: "300px" }}>
+                              <CardMedia
+                                component="img"
+                                alt="Uploaded Image"
+                                height="auto"
+                                image={
+                                  formData.poster instanceof File
+                                    ? URL.createObjectURL(formData.poster)
+                                    : formData.poster
+                                }
+                              />
+                            </Card>
+                            <Box
+                              textAlign="center"
+                              onClick={() =>
+                                setFormData({ ...formData, poster: "" })
+                              }
+                            >
+                              <Typography
+                                variant="contained"
+                                component="span"
+                                sx={{
+                                  fontFamily: "Montserrat",
+                                  fontSize: "14px",
+                                  fontWeight: 400,
+                                  lineHeight: "24px",
+                                  color: "#FFF",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Click to Cancel
+                              </Typography>
+                            </Box>
+                          </>
                         ) : (
                           <Box textAlign="center" onChange={handleImageUpload}>
                             <input
@@ -191,25 +195,7 @@ const postMovieList = () =>{
                               name="poster"
                             />
                             <Box pb={5}>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <g clip-path="url(#clip0_3_346)">
-                                  <path
-                                    d="M18 15V18H6V15H4V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V15H18ZM17 11L15.59 9.59L13 12.17V4H11V12.17L8.41 9.59L7 11L12 16L17 11Z"
-                                    fill="white"
-                                  />
-                                </g>
-                                <defs>
-                                  <clipPath id="clip0_3_346">
-                                    <rect width="24" height="24" fill="white" />
-                                  </clipPath>
-                                </defs>
-                              </svg>
+                              <ImportIcon />
                             </Box>
                             <label htmlFor="image-upload-input">
                               <Typography
@@ -230,7 +216,7 @@ const postMovieList = () =>{
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  pt:2
+                                  pt: 2,
                                 }}
                               >
                                 Drop an image here
@@ -239,12 +225,12 @@ const postMovieList = () =>{
                           </Box>
                         )}
                         {formErrors.poster ? (
-                      <FormHelperText sx={{ color: "#d32f2f" }}>
-                        Please upload the image*
-                      </FormHelperText>
-                    ) : (
-                      ""
-                    )}
+                          <FormHelperText sx={{ color: "#d32f2f" }}>
+                            Please upload the image*
+                          </FormHelperText>
+                        ) : (
+                          ""
+                        )}
                       </Grid>
                     </Grid>
                   </Box>
@@ -363,7 +349,10 @@ const postMovieList = () =>{
                   >
                     <Box component={"span"}>Cancel</Box>
                   </Button>
-                  <Button
+                  <LoadingButton
+                    loading={loading}
+                    loadingPosition="start"
+                    variant="outlined"
                     sx={{
                       borderRadius: "10px",
                       color: "#FFF",
@@ -388,18 +377,20 @@ const postMovieList = () =>{
                         width: "18px",
                         ml: 0.5,
                       },
+                      "&.Mui-disabled": {
+                        opacity: 0.8,
+                        color: "#FFF !important",
+                      },
                     }}
                     onClick={handleSubmit}
                   >
                     <Box component={"span"}>Submit</Box>
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </Grid>
             </Grid>
           </Box>
         </Box>
-
-       
       </Box>
     </>
   );

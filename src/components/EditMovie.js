@@ -12,11 +12,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import ImportIcon from "../icons/ImportIcon";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const EditMovie = () => {
   const location = useLocation();
   const { movieData } = location?.state;
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -68,20 +71,23 @@ const EditMovie = () => {
     postMovieList();
   };
 
-  const postMovieList = () => {
+  const postMovieList = async () => {
+    setLoading(true);
     const addMovieData = new FormData();
     addMovieData.append("title", formData.title);
     addMovieData.append("publishYear", formData.publishYear);
     addMovieData.append("poster", formData.poster);
-    axios
+    await axios
       .put(
         `${process.env.REACT_APP_API_URL}/api/movie/${movieData._id}`,
         addMovieData
       )
       .then((response) => {
+        setLoading(false);
         navigate("/movies");
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error:", error);
       });
   };
@@ -89,8 +95,6 @@ const EditMovie = () => {
   return (
     <>
       <Box
-        position={"relative"}
-        backgroundColor="#093545"
         sx={{
           ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
             border: "none",
@@ -98,20 +102,6 @@ const EditMovie = () => {
           pb: 15,
         }}
       >
-        <Box
-          component={"img"}
-          src="./pagevector.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
-        <Box
-          component={"img"}
-          src="./pageVector2.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
         <Box paddingLeft={{ xs: 0, sm: 0, md: 10 }}>
           <Box py={10}>
             <Typography
@@ -140,7 +130,7 @@ const EditMovie = () => {
                   sx={{
                     flexGrow: 1,
                     height: { xs: "340px", sm: "340px", md: "504px" },
-                    width: { xs: "100%", sm: "100%", md: "473px" },
+                    width: { xs: "100%", sm: "100%", md: "100%", lg: "473px" },
                     borderRadius: "10px",
                     border: "2px dashed #FFF",
                     background: "var(--input-color, #224957)",
@@ -206,25 +196,7 @@ const EditMovie = () => {
                               name="poster"
                             />
                             <Box pb={5}>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <g clip-path="url(#clip0_3_346)">
-                                  <path
-                                    d="M18 15V18H6V15H4V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V15H18ZM17 11L15.59 9.59L13 12.17V4H11V12.17L8.41 9.59L7 11L12 16L17 11Z"
-                                    fill="white"
-                                  />
-                                </g>
-                                <defs>
-                                  <clipPath id="clip0_3_346">
-                                    <rect width="24" height="24" fill="white" />
-                                  </clipPath>
-                                </defs>
-                              </svg>
+                              <ImportIcon />
                             </Box>
                             <label htmlFor="image-upload-input">
                               <Typography
@@ -378,7 +350,10 @@ const EditMovie = () => {
                   >
                     <Box component={"span"}>Cancel</Box>
                   </Button>
-                  <Button
+                  <LoadingButton
+                    loading={loading}
+                    loadingPosition="start"
+                    variant="outlined"
                     sx={{
                       borderRadius: "10px",
                       color: "#FFF",
@@ -403,11 +378,15 @@ const EditMovie = () => {
                         width: "18px",
                         ml: 0.5,
                       },
+                      "&.Mui-disabled": {
+                        opacity: 0.8,
+                        color: "#FFF !important",
+                      },
                     }}
                     onClick={handleSubmit}
                   >
                     <Box component={"span"}>Update</Box>
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </Grid>
             </Grid>

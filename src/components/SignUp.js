@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import axios from "axios";
+import LoadingButton from "@mui/lab/LoadingButton";
 const SignUp = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
@@ -20,6 +21,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = React.useState(false);
 
   const [formErrors, setFormErrors] = useState({
     email: false,
@@ -34,6 +36,7 @@ const SignUp = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     const errors = {};
 
     if (formData.email === "") {
@@ -59,11 +62,15 @@ const SignUp = () => {
         );
         if (response.data.status === "Success") {
           localStorage.setItem("token", response.data.token);
+          setLoading(false);
+
           navigate("/movies");
         } else {
+          setLoading(false);
           setLoginError(response.data.message);
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching data:", error.response.data.error);
         setLoginError(error.response.data.error);
       }
@@ -72,16 +79,14 @@ const SignUp = () => {
   return (
     <>
       <Box
-        position={"relative"}
-        backgroundColor="#093545"
         sx={{
           ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
             border: "none",
           },
-          ".css-fbj545-MuiTypography-root":{
+          ".css-fbj545-MuiTypography-root": {
             fontFamily: "Montserrat",
           },
-          fontFamily: "Montserrat"
+          fontFamily: "Montserrat",
         }}
       >
         <Box
@@ -115,14 +120,7 @@ const SignUp = () => {
               paddingY={{ xs: 0, sm: 0, md: 2, lg: 1 }}
               spacing={{ xs: 1, sm: 1, md: 1, lg: 2 }}
             >
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={12}
-                lg={12}
-                mb={{ xs: 1, sm: 1, md: 3 }}
-              >
+              <Grid item xs={12} mb={{ xs: 1, sm: 1, md: 3 }}>
                 <FormControl
                   sx={{
                     m: { xs: 0, sm: 0, md: 1, lg: 0 },
@@ -160,14 +158,7 @@ const SignUp = () => {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={12}
-                lg={12}
-                mb={{ xs: 1, sm: 1, md: 3 }}
-              >
+              <Grid item xs={12} mb={{ xs: 1, sm: 1, md: 3 }}>
                 <FormControl
                   sx={{
                     m: { xs: 0, sm: 0, md: 1, lg: 0 },
@@ -186,6 +177,7 @@ const SignUp = () => {
                     placeholder="Password"
                     name="password"
                     fullWidth
+                    type="password"
                     value={formData.password}
                     onChange={handleInputChange}
                     error={formErrors.password}
@@ -266,13 +258,15 @@ const SignUp = () => {
                 ""
               )}
               <Grid item xs={12}>
-                <Button
+                <LoadingButton
+                  loading={loading}
+                  loadingPosition="start"
+                  variant="outlined"
                   sx={{
                     borderRadius: "10px",
-                    mb: 3,
                     color: "#FFF",
                     background: "var(--primary, #2BD17E)",
-                    fontSize: { xs: "14px", sm: "14px", md: "16px" },
+                    fontSize: { xs: "13px", sm: "13px", md: "16px" },
                     fontWeight: { xs: 400, sm: 400, md: 700 },
                     padding: {
                       xs: "8px 12px",
@@ -280,7 +274,7 @@ const SignUp = () => {
                       md: "16px 12px",
                     },
                     width: "100%",
-                    height: { xs: "36px", sm: "36px", md: "50px !important" },
+                    height: { xs: "36px", sm: "36px", md: "56px !important" },
                     textTransform: "math-auto",
                     fontFamily: "Montserrat",
                     "&:hover": {
@@ -292,29 +286,19 @@ const SignUp = () => {
                       width: "18px",
                       ml: 0.5,
                     },
+                    "&.Mui-disabled": {
+                      opacity: 0.8,
+                      color: "#FFF !important",
+                    },
                   }}
                   onClick={handleSubmit}
                 >
-                  Login
-                </Button>
+                  <Box component={"span"}>Login</Box>
+                </LoadingButton>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Box
-          component={"img"}
-          src="./pagevector.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
-        <Box
-          component={"img"}
-          src="./pageVector2.png"
-          position={"absolute"}
-          bottom={0}
-          width={"100%"}
-        ></Box>
       </Box>
     </>
   );
