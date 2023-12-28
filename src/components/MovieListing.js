@@ -116,6 +116,7 @@ const MovieListing = () => {
                       width: { xs: "18px", md: "22px" },
                     },
                   }}
+                  onClick={handleRoute}
                 >
                   <Typography>My movies </Typography>
                   <AddIcon />
