@@ -65,7 +65,7 @@ const MovieListing = () => {
     <>
       <Box height={"100%"}>
         {loading ? (
-          <Box height="100vh">
+          <Box height={{xs: "100%", md:"100vh"}}>
             <Grid
               container
               spacing={{ xs: 2, md: 6 }}
