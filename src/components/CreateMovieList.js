@@ -15,6 +15,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ImportIcon from "../icons/ImportIcon";
+import Container from "@mui/material/Container";
 
 const CreateMovieList = () => {
   const navigate = useNavigate();
@@ -92,16 +93,16 @@ const CreateMovieList = () => {
   };
 
   return (
-    <>
+    <Container sx={{ height: { xs: "100vh", md: "100vh", lg: "100%", xl: '100vh' } }}>
       <Box
         sx={{
           ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
             border: "none",
           },
-          pb: 15,
         }}
+        className="container"
       >
-        <Box paddingLeft={{ xs: 0, sm: 0, md: 10 }}>
+        <Box>
           <Box py={10}>
             <Typography
               sx={{
@@ -392,7 +393,7 @@ const CreateMovieList = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Container>
   );
 };
 

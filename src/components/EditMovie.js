@@ -9,6 +9,7 @@ import {
   OutlinedInput,
   Button,
   FormHelperText,
+  Container
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -93,7 +94,7 @@ const EditMovie = () => {
   };
 
   return (
-    <>
+    <Container sx={{ height: { xs: "100vh", md: "100vh", lg: "100%", xl: '100vh' } }}>
       <Box
         sx={{
           ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
@@ -102,7 +103,7 @@ const EditMovie = () => {
           pb: 15,
         }}
       >
-        <Box paddingLeft={{ xs: 0, sm: 0, md: 10 }}>
+        <Box>
           <Box py={10}>
             <Typography
               sx={{
@@ -401,7 +402,7 @@ const EditMovie = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Container>
   );
 };
 
