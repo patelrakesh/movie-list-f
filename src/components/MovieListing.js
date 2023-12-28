@@ -70,14 +70,14 @@ const MovieListing = () => {
       >
         <Box
           component={"img"}
-          src="./pagevector.png"
+          src="./pageVector.png"
           position={"absolute"}
           bottom={0}
           width={"100%"}
         ></Box>
         <Box
           component={"img"}
-          src="./pagevector2.png"
+          src="./pageVector2.png"
           position={"absolute"}
           bottom={0}
           width={"100%"}
